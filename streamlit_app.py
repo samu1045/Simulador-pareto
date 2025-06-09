@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import random
 
 # Configurar página
-st.set_page_config(page_title="Simulación Diagrama de Pareto", layout="centered")
+st.set_page_config(page_title="Simulador Inteligente - Diagrama de Pareto", layout="centered")
 
 st.title("🧠 Simulador Diagnóstico Empresarial - Método de Pareto")
 
@@ -53,8 +53,12 @@ problemas = escenarios[escenario]["problemas"]
 st.markdown(f"### 📝 Descripción del escenario seleccionado:")
 st.info(descripcion)
 
-# Mezclar aleatoriamente los problemas
-problemas_mezclados = random.sample(problemas, len(problemas))
+# Mezclar aleatoriamente una sola vez por escenario
+if "mezcla" not in st.session_state or st.session_state.escenario_actual != escenario:
+    st.session_state.mezcla = random.sample(problemas, len(problemas))
+    st.session_state.escenario_actual = escenario
+
+problemas_mezclados = st.session_state.mezcla
 
 st.markdown("### 🎯 Asigna una prioridad (1–10) a cada problema según tu percepción:")
 
@@ -155,4 +159,4 @@ if st.button("📊 Evaluar mi diagnóstico"):
                 range=[0, 110]
             )
         )
-        st.plotl
+        st.plotly_chart(fig2)
